@@ -1,0 +1,39 @@
+﻿@model List<ViewModels.ProductViewModel>
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h2>Checkout</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Il carrello è vuoto.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Prezzo</th>
+                    <th>Quantità</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Nome</td>
+                        <td>@item.Prezzo €</td>
+                        <td>1</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <form method="post" asp-action="ConfirmOrder">
+        <button type="submit" class="btn btn-primary">Conferma Ordine</button>
+    </form>
+}

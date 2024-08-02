@@ -1,0 +1,40 @@
+﻿@model IEnumerable<ViewModels.ProductViewModel>
+
+@{
+    ViewData["Title"] = "Prodotti";
+}
+
+<h2>Prodotti</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Non ci sono prodotti disponibili.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img class="card-img-top" src="@item.Foto" alt="Foto" style="height: 225px; width: 100%; display: block;">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Nome</h5>
+                        <p class="card-text">Prezzo: @item.Prezzo €</p>
+                        <p class="card-text">Tempo di Consegna: @item.Tempodiconsegna minuti</p>
+                        <p class="card-text">Ingredienti: @item.Ingredienti</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a href="/User/Home/Details/@item.Id" class="btn btn-sm btn-outline-secondary">Dettagli</a>
+                                <form method="post" asp-action="AddToCart">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">Aggiungi al Carrello</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

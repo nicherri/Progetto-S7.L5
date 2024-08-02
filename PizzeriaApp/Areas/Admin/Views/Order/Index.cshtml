@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ViewModels.OrderViewModel>
+
+@{
+    ViewData["Title"] = "Gestione Ordini";
+}
+
+<h2>Gestione Ordini</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Utente</th>
+            <th>Indirizzo</th>
+            <th>Status</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.UserName</td>
+                <td>@order.Indirizzo</td>
+                <td>@order.Status</td>
+                <td>
+                    <a href="/Admin/Order/Details/@order.Id" class="btn btn-info">Dettagli</a>
+                    <form method="post" action="/Admin/Order/ProcessOrder" style="display:inline;">
+                        <input type="hidden" name="id" value="@order.Id" />
+                        <button type="submit" class="btn btn-warning">Processa</button>
+                    </form>
+                    <form method="post" action="/Admin/Order/CompleteOrder" style="display:inline;">
+                        <input type="hidden" name="id" value="@order.Id" />
+                        <button type="submit" class="btn btn-success">Completa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

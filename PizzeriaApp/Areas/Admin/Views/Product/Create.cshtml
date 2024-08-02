@@ -1,0 +1,106 @@
+﻿@model ViewModels.ProductViewModel
+
+@{
+    ViewData["Title"] = "Aggiungi Prodotto";
+}
+
+<h2>Aggiungi Prodotto</h2>
+
+<h4>Prodotto</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" action="/Admin/Product/Create">
+            <div class="form-group">
+                <label asp-for="Nome" class="control-label"></label>
+                <input asp-for="Nome" class="form-control" placeholder="Inserisci il nome del prodotto" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Foto" class="control-label"></label>
+                <input asp-for="Foto" class="form-control" placeholder="Inserisci l'URL della foto" />
+                <span asp-validation-for="Foto" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Prezzo" class="control-label"></label>
+                <input asp-for="Prezzo" class="form-control" placeholder="Inserisci il prezzo" />
+                <span asp-validation-for="Prezzo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tempodiconsegna" class="control-label"></label>
+                <input asp-for="Tempodiconsegna" class="form-control" placeholder="Inserisci il tempo di consegna in minuti" />
+                <span asp-validation-for="Tempodiconsegna" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ingredienti" class="control-label"></label>
+                <textarea asp-for="Ingredienti" class="form-control" placeholder="Inserisci gli ingredienti separati da una virgola"></textarea>
+                <span asp-validation-for="Ingredienti" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#ingredientModal">Scegli Ingredienti</button>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Aggiungi" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a href="/Admin/Product/Index">Torna alla lista</a>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="ingredientModal" tabindex="-1" role="dialog" aria-labelledby="ingredientModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ingredientModalLabel">Scegli Ingredienti</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="ingredientList" class="list-group">
+                    <!-- Gli ingredienti verranno caricati qui tramite JavaScript -->
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-primary" id="saveIngredients">Salva Ingredienti</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#ingredientModal').on('show.bs.modal', function () {
+                $.ajax({
+                    url: '/Admin/Ingredient/GetAll',
+                    type: 'GET',
+                    success: function (data) {
+                        var ingredientList = $('#ingredientList');
+                        ingredientList.empty();
+                        data.forEach(function (ingredient) {
+                            ingredientList.append('<li class="list-group-item"><input type="checkbox" value="' + ingredient + '"/> ' + ingredient + '</li>');
+                        });
+                    },
+                    error: function () {
+                        alert("Errore durante il caricamento degli ingredienti.");
+                    }
+                });
+            });
+
+            $('#saveIngredients').on('click', function () {
+                var selectedIngredients = [];
+                $('#ingredientList input:checked').each(function () {
+                    selectedIngredients.push($(this).val());
+                });
+                $('textarea[name="Ingredienti"]').val(selectedIngredients.join(', '));
+                $('#ingredientModal').modal('hide');
+            });
+        });
+    </script>
+}

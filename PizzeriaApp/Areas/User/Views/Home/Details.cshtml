@@ -1,0 +1,21 @@
+﻿@model ViewModels.ProductViewModel
+
+@{
+    ViewData["Title"] = "Dettagli Prodotto";
+}
+
+<h2>@Model.Nome</h2>
+
+<div class="card mb-4 shadow-sm">
+    <img class="card-img-top" src="@Model.Foto" alt="Foto" style="height: 225px; width: 100%; display: block;">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Nome</h5>
+        <p class="card-text">Prezzo: @Model.Prezzo €</p>
+        <p class="card-text">Tempo di Consegna: @Model.Tempodiconsegna minuti</p>
+        <p class="card-text">Ingredienti: @Model.Ingredienti</p>
+        <form method="post" asp-action="AddToCart">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit" class="btn btn-primary">Aggiungi al Carrello</button>
+        </form>
+    </div>
+</div>

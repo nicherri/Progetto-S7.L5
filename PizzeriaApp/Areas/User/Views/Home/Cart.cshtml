@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ViewModels.ProductViewModel>
+
+@{
+    ViewData["Title"] = "Carrello";
+}
+
+<h2>Carrello</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Il carrello è vuoto.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Prezzo</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Nome</td>
+                        <td>@item.Prezzo €</td>
+                        <td>
+                            <form method="post" asp-action="RemoveFromCart">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Rimuovi</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h3>Totale: @Model.Sum(x => x.Prezzo) €</h3>
+        <a href="/User/Checkout/Index" class="btn btn-primary">Procedi al Checkout</a>
+    </div>
+}
